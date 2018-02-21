@@ -1,0 +1,43 @@
+Summary: AntigenBLAST is designed to identify short regions of high similarity between any submitted protein sequence and all the other proteins in a user specified genome. The results are presented as an html document with an easy-to-interpret graph of homologous regions and corresponding tables of the matching peptides / proteins. The tool can be used to identify potential off-target linear epitopes within an input protein. Highly conserved peptides within a protein can frequently be found in the active site of a protein, AntigenBLAST may also be useful in the identification of small-molecule off-targets which also bind in the active site.
+
+Set Up: BLASTable database(s) of the desired proteome(s) must first be created using the Make_Proteome_Sets.pl application. By default, this application creates BLASTable databases of the human (NCBI Tax ID: 9606), cynomolgus macaque (NCBI Tax ID: 9541), mouse (NCBI Tax ID: 10090), rat (NCBI Tax ID: 10116), rabbit (NCBI Tax ID: 9986), and dog (NCBI Tax ID: 9615) proteomes. The proteome databases set can be changed by editing the %Organisms hash in the application. If supplied with gene2go file, the  application also creates organism-specific <species_name>.GO_Component files of Gene Ontology Component annotations to help identify proteins with an extracellular component.
+
+Usage: AntigenBLAST assumes the query protein is in fasta format. AntigenBLAST assumes the first argument is the fasta file and the second argument species designation for which proteome to compare. By default, the application scans for perfect matches to 6 and 8-mer peptides. Results are formatted as HTML documents and saved as <input filename prefix>_6aa.html or _8aa.html as appropriate.
+
+Details
+
+Set-Up (The following only need to be completed upon initial installation.)
+1) Download the AntigenBLAST tools from __.
+2) Download the appropriate version of NCBI's BLAST executable files for your system from:      ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST
+3) Install the BLAST executables and ensure that they are in your environments PATH
+       b) Alternatively, the paths to the required makeblastdb and blastp programs can be set in the PERL scripts respectively.
+4) Edit the paths to the makeblastdb and blastp programs within the 'Make_Proteome_Sets.pl' and 'AntigenBLAST.pl' applications respectively. (Necessary only if makeblastdb and blastp are not in your PATH environment)
+5) Create sub-directories for organism proteome databases and data files.
+Note: By default, the sub-directories should be created in the same directory as the AntigenBLAST tool. (for human, create './data/human', for mouse create './data/mouse', etc. See PERL scripts for details. If you chose to use different directories, both scripts will need to be edited.
+6) Download the GenBank formatted and compressed protein sequence files for each organism for which you wish    to create a BLASTable database into the above sub-directories.
+     Note: The files can be downloaded from organism-specific sub-directories under 'ftp://ftp.ncbi.nlm.nih.gov/genomes/' and have the form of 'ftp://ftp.ncbi.nlm.nih.gov/genomes/<organism>/protein/protein.gbk.gz'.
+7) Download the required gene-info file from 'ftp://ftp.ncbi.nih.gov/gene/DATA/gene_info.gz'.
+8) Download the optional gene2go file from 'ftp://ftp.ncbi.nih.gov/gene/DATA/gene2go.gz'.
+9) Uncompress both the 'gene_info.gz' and the 'gene2go.gz' files and move them to a suitable location.
+10) Edit the paths to the uncompressed 'gene_info' and 'gene2go' files in the 'Make_Proteome_Sets.pl' application.
+11) Run the 'Make_Proteome_Sets.pl' application.
+Note: Depending on your system and the number of databases you are creating, it may take 5-10' to complete.
+
+Usage:
+1) Create a fasta formatted version of the protein sequence you wish to query and save it in plain text format.
+2) Run AntigenBLAST as follows: AntigenBLAST <fasta.file> <species_designator>
+Species Designators (default set)
+       human		=>	Run against human proteome (default value)
+       mouse		=>	Run against mouse proteome
+       dog		=>	Run against dog proteome
+       cyno		=>	Run against cynomolgus proteome
+       rat		=>	Run against rat proteome
+       rabbit	=>	Run against rabbit proteome
+Note: designators are not case-sensitive
+
+Usage notes:
+By default, AntigenBLAST will create two output files with filenames based on the name of your input file. The files will be <filename_prefix>_6aa.html and <filename_prefix>_8aa.html and contain the results of matches against using 6-mer and 8-mer peptide windows across your query protein. The default n-mer fragment size and number of different n-mer's tested can be changed by altering the @Pep_Sizes array in AntigenBLAST.pl.
+
+When AntigenBLAST is executed, it first compares the full-length query against the selected proteome. If a perfect match is found to the query, it is assumed the query and match protein (and corresponding gene) are the same and hits against this matching sequence will NOT be reported on in the AntigenBLAST output other than to note the perfect full-length match.
+
+AntigenBLAST also reports any other full-length hits against the query down to 50% identity. (This threshold can be set in AntigenBLAST.pl by altering the '$protein_ident_thres' variable.)  By default, AntigenBLAST only maps perfect matches to between n-mers in the query to n-mers in the proteome. Mismatches can be allowed by setting the '$peptide_ident_thres' variable in AntigenBLAST.pl to the desired level of ambiguity desired.   
