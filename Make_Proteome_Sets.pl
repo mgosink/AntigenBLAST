@@ -58,10 +58,10 @@
 $makeblastcmd = '' . 'makeblastdb';
 
 #$geneinfofile = '/path/to/geneinfo/file/' . 'gene_info';
-$geneinfofile = '/cssi/cbrdb/refseqreffiles/online/' . 'gene_info';
+$geneinfofile = '' . 'gene_info';
 
 #$genegofile = '/path/to/gene2go/file/' . 'gene2go';
-$genegofile = '/cssi/cbrdb/refseqreffiles/online/' . 'gene2go';
+$genegofile = '' . 'gene2go';
 
 #	Build a hash mapping GeneIDs to gene symbols
 %GeneID_2_Sym = ();
